@@ -21,8 +21,11 @@ app.get("/", (req,res)=>{
 })
 
 //Access to SQL Data
-app.get("/test", (req, res)=>{
-    const q = "SELECT trace_data FROM test"
+app.get("/data/:id", (req, res)=>{
+    const id = req.params.id;
+
+    const q = "SELECT trace_data FROM test WHERE trace_id = " + id
+    
     db.query(q,(err,data)=>{
         if(err) return res.json(err)
 
@@ -32,6 +35,7 @@ app.get("/test", (req, res)=>{
         for (let i = 0; i < blobData.length; i += 4){
             newIntegers.push(blobData.readInt32BE(i) / 1000);
         }
+
         res.json(newIntegers);
     })
 })
